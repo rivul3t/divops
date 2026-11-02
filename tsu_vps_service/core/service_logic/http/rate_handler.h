@@ -1,4 +1,4 @@
-/// @brief
+/// @brief Файл содержит объявление методов для работы с данными тарифов
 ///
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/http
 
@@ -24,7 +24,7 @@ public:
 
     void GetRate( const drogon::HttpRequestPtr& request,
                   std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-                  std::uint32_t rateId ) const;
+                  std::uint32_t id ) const;
 
     void GetRateList( const drogon::HttpRequestPtr& request,
                       std::function<void(const drogon::HttpResponsePtr &)> &&callback ) const;
@@ -34,11 +34,11 @@ public:
 
     void UpdateRate( const drogon::HttpRequestPtr& request,
                      std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-                     std::uint32_t rateId ) const;
+                     std::uint32_t id ) const;
 
     void DeleteRate( const drogon::HttpRequestPtr& request,
                      std::function<void(const drogon::HttpResponsePtr &)> &&callback,
-                     std::uint32_t rateId ) const;
+                     std::uint32_t id ) const;
 };
 
 } //namespace service_logic::http

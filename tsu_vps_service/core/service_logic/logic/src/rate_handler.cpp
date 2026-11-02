@@ -1,4 +1,4 @@
-/// @brief
+/// @brief Файл содержит реализацию методов для работы с данными тарифов
 ///
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/logic/src
 
@@ -121,7 +121,7 @@ bool DeleteRate::operator()( const std::uint32_t& id ) const try
      "DELETE FROM service_rates WHERE id = $1;",
         static_cast< int >( id )
     );
-    
+
     return sqlQuery.affectedRows() > 0;
 }
 catch( ... )

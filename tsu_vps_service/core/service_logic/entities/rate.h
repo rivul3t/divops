@@ -12,6 +12,7 @@
 namespace service_logic
 {
 
+/// @brief Данные о новом тарифе
 struct NewRate
 {
     std::string name_;
@@ -24,6 +25,7 @@ void WriteJson( Json::Value& jsonValue, const NewRate& value );
 void ReadJson( const Json::Value& jsonValue, NewRate& value );
 
 
+/// @brief Данные о тарифе
 struct Rate
 {
     std::uint32_t id_;

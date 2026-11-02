@@ -1,4 +1,4 @@
-/// @brief
+/// @brief Файл содержит реализацию методов для работы с данными тарифов
 ///
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/http/src
 
@@ -9,10 +9,10 @@ namespace service_logic::http
 {
 
 void RateHandler::GetRate( const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t rateId ) const try
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t id ) const try
 {
     logic::GetRate handler;
-    auto record = handler( rateId );
+    auto record = handler( id );
 
     if( !record.has_value() )
     {
@@ -84,7 +84,7 @@ catch( ... )
 }
 
 void RateHandler::UpdateRate( const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t rateId ) const try
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t id ) const try
 {
     auto jsonPtr = request->getJsonObject();
     if( !jsonPtr )
@@ -96,7 +96,7 @@ void RateHandler::UpdateRate( const drogon::HttpRequestPtr& request,
     }
 
     Rate rate;
-    rate.id_ = rateId;
+    rate.id_ = id;
     ReadJson( *jsonPtr, rate.rate_ );
 
     logic::UpdateRate handler;
@@ -112,10 +112,10 @@ catch( ... )
 }
 
 void RateHandler::DeleteRate( const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t rateId ) const try
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t id ) const try
 {
     logic::DeleteRate handler;
-    bool isDeleted = handler( rateId );
+    bool isDeleted = handler( id );
 
     auto response = drogon::HttpResponse::newHttpResponse();
     response->setStatusCode( isDeleted ? drogon::k200OK : drogon::k404NotFound );

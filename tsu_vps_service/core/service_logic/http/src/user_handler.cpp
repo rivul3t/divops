@@ -1,4 +1,4 @@
-/// @brief
+/// @brief Файл содержит объявление методов для работы с данными пользователей
 ///
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/http/src
 
@@ -10,10 +10,10 @@ namespace service_logic::http
 {
 
 void GetUser::operator()( const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t userId ) const try
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t id ) const try
 {
     logic::GetUser handler;
-    auto record = handler( userId );
+    auto record = handler( id );
 
     if( !record.has_value() )
     {
