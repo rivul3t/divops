@@ -20,7 +20,7 @@ public:
     /// @brief Получить данные о пользователе
     /// @param Идентификатор пользователя
     /// @return Данные о пользователе
-    User operator()( const std::int32_t& id ) const;
+    std::optional< User > operator()( const std::int32_t& id ) const;
 
 };
 
@@ -43,11 +43,12 @@ class SetUser
 {
 public:
 
+    /// @brief Конструктор
     explicit SetUser() = default;
 
     /// @brief Добавить данные о пользователе
     /// @param Данные пользователя
-    void operator()( const User& userData ) const;
+    void operator()( NewUser& userData ) const;
 
 };
 

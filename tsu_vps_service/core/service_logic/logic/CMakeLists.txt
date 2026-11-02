@@ -1,14 +1,12 @@
 project( service_logic_logic )
 
-#add_library( service_logic_logic STATIC
-#        src/user_handler.cpp
-#)
+file(GLOB_RECURSE SRC src/*.cpp)
 
-#target_include_directories( service_logic_logic PUBLIC
-#        ${CMAKE_SOURCE_DIR}/..
-#)
+add_library( ${PROJECT_NAME} STATIC ${SRC}
+        rate_handler.h
+        src/rate_handler.cpp)
 
-#target_link_libraries( service_logic_logic PUBLIC
-#        service_logic_entities
-#        Drogon::Drogon
-#)
+target_link_libraries( ${PROJECT_NAME} PUBLIC
+        service_logic_entities
+        Drogon::Drogon
+)

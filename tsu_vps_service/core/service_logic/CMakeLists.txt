@@ -1,30 +1,25 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.16)
 
 project(service_logic)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-file(GLOB SOURCES "src/*.cpp")
+find_package(Drogon REQUIRED)
 
-list(APPEND CMAKE_PREFIX_PATH "/home/nobahu/libs/drogon")
-find_package( Drogon REQUIRED )
+add_subdirectory(entities)
+add_subdirectory(logic)
+add_subdirectory(http)
 
-add_executable( service_logic main.cpp
-        entities/src/user.cpp
-        entities/src/user.cpp
-        logic/user_handler.h
-        logic/src/user_handler.cpp)
+add_library(${PROJECT_NAME} INTERFACE
+        entities/src/rate.cpp)
 
-target_include_directories( service_logic PRIVATE
-        ${CMAKE_SOURCE_DIR}/..
+target_link_libraries(${PROJECT_NAME} INTERFACE
+        service_logic_entities
+        service_logic_logic
+        service_logic_http
 )
 
-target_link_libraries(
-        ${PROJECT_NAME} PRIVATE
-        Drogon::Drogon
+target_include_directories(${PROJECT_NAME} INTERFACE
+        ${CMAKE_SOURCE_DIR}
 )
-
-add_subdirectory( entities )
-add_subdirectory( logic )
-add_subdirectory( http )

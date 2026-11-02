@@ -21,6 +21,9 @@ enum class UserRole
     ServiceUser
 };
 
+std::string RoleToString( const UserRole& role );
+UserRole StringToRole( const std::string& role );
+
 /// @brief Данные о новом пользователе
 struct NewUser
 {

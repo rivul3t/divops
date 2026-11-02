@@ -4,7 +4,34 @@
 
 #pragma once
 
+#include <cstdint>
+#include <string>
+
+#include <json/json.h>
+
 namespace service_logic
 {
+
+struct NewRate
+{
+    std::string name_;
+    std::uint32_t ramAmount_;
+    std::uint32_t hdAmount_;
+    float price_;
+};
+
+void WriteJson( Json::Value& jsonValue, const NewRate& value );
+void ReadJson( const Json::Value& jsonValue, NewRate& value );
+
+
+struct Rate
+{
+    std::uint32_t id_;
+    NewRate rate_;
+};
+
+void WriteJson( Json::Value& jsonValue, const Rate& value );
+void ReadJson( const Json::Value& jsonValue, Rate& value );
+
 
 } //namespace service_logic

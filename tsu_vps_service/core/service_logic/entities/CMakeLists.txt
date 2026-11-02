@@ -1,13 +1,10 @@
-project( entities )
+project( service_logic_entities )
 
-add_library( entities STATIC
-        src/user.cpp
-)
+file(GLOB_RECURSE SRC src/*.cpp)
 
-target_include_directories( entities PUBLIC
-        ${CMAKE_SOURCE_DIR}/..
-)
+add_library( ${PROJECT_NAME} STATIC ${SRC})
 
-target_link_libraries( entities PUBLIC
+target_link_libraries( ${PROJECT_NAME} PUBLIC
         Drogon::Drogon
+        helpers_lib
 )
