@@ -10,7 +10,7 @@ namespace service_logic::http
 {
 
 void GetUser::operator()( const drogon::HttpRequestPtr& request,
-    std::function<void(const drogon::HttpResponsePtr &)> &&callback, uint32_t userId ) const try
+    std::function<void(const drogon::HttpResponsePtr &)> &&callback, std::uint32_t userId ) const try
 {
     logic::GetUser handler;
     auto record = handler( userId );
