@@ -1,0 +1,3 @@
+---
+- name: Deploy a shared k3s cluster with k3s-io/k3s-ansible
+  ansible.builtin.import_playbook: k3s.orchestration.site

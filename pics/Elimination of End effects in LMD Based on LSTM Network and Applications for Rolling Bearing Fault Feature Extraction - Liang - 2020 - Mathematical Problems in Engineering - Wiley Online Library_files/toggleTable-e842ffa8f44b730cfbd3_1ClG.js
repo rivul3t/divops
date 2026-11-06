@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[49],{556:function(n,o,i){!function(){$("body");var n=$(window),o={vPort:"screen-xs",init:function init(){o.on.build(),o.control()},control:function control(){n.on("resize",(function(){o.on.build()})),$(document).on(o.vPort+"-on",(function(){!0,o.on.build()})),$(document).on(o.vPort+"-off",(function(){!1}))},on:{build:function build(){0}}};UX.toggleTable=o}()}}]);
+//# sourceMappingURL=toggleTable-e842ffa8f44b730cfbd3.js.map
