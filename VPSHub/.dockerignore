@@ -1,0 +1,33 @@
+# VCS
+.git
+.gitignore
+
+# Secrets and local config — never bake into the image
+.env
+.env.*
+
+# Local data / databases
+data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Python caches and virtualenvs
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+
+# Dev-only and container build files
+tests/
+docs/
+README.md
+requirements-dev.txt
+requirements-lock.txt
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# OS cruft
+.DS_Store
