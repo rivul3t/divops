@@ -28,7 +28,7 @@ int main( int argc, char* argv[] )
         APP_LOG_INFO( "tsu_service_app has started..." );
         drogon::app().run();
     }
-    catch ( utils::Exception& e )
+    catch ( ... )
     {
         APP_LOG_ERROR( "tsu_service_app crashed..." );
         return -1;
