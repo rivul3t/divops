@@ -7,8 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB_RECURSE SRC src/*.cpp)
 
-add_library(
-        ${PROJECT_NAME}
+list(APPEND CMAKE_PREFIX_PATH "/home/nobahu/libs/drogon")
+find_package( spdlog REQUIRED )
+
+add_library( ${PROJECT_NAME}
         STATIC
         ${SRC}
 )
@@ -19,6 +21,7 @@ target_include_directories( helpers_lib PUBLIC
 
 target_link_libraries(
         ${PROJECT_NAME}
-        PRIVATE
+        PUBLIC
         Drogon::Drogon
+        spdlog::spdlog
 )

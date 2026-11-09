@@ -9,8 +9,13 @@ file(GLOB_RECURSE SRC "src/*.cpp")
 
 add_executable( ${PROJECT_NAME} ${SRC} )
 
-target_link_libraries(
-        ${PROJECT_NAME} PRIVATE
-        Drogon::Drogon
+target_link_libraries( ${PROJECT_NAME}
+        PRIVATE
+        -Wl,--whole-archive
+        service_logic_http
+        service_logic_logic
+        service_logic_entities
+        -Wl,--no-whole-archive
+        helpers_lib
         service_logic
 )

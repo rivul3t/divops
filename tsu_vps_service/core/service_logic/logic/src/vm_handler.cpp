@@ -3,12 +3,14 @@
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/logic/src
 
 #include <tsu_vps_service/core/service_logic/logic/vm_handler.h>
+#include <tsu_vps_service/core/helpers/logger.h>
+#include <tsu_vps_service/core/helpers/exception.h>
 #include <drogon/drogon.h>
 
 namespace service_logic::logic
 {
 
-std::optional< VirtualMachine > GetVM::operator()( const std::int32_t& id ) const
+std::optional< VirtualMachine > GetVM::operator()( const std::int32_t& id ) const try
 {
     auto db = drogon::app().getDbClient();
 
@@ -37,8 +39,19 @@ std::optional< VirtualMachine > GetVM::operator()( const std::int32_t& id ) cons
     };
     return vm;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::GetVM" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
+catch( ... )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetVM" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::GetVM" ) );
+}
 
-std::vector< VirtualMachine > GetVMList::operator()() const
+
+std::vector< VirtualMachine > GetVMList::operator()() const try
 {
     auto db = drogon::app().getDbClient();
 
@@ -68,8 +81,19 @@ std::vector< VirtualMachine > GetVMList::operator()() const
     }
     return vmList;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::GetVMList" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
+catch( ... )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetVMList" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::GetVMList" ) );
+}
 
-void SetVM::operator()( const NewVirtualMachine& vm ) const
+
+void SetVM::operator()( const NewVirtualMachine& vm ) const try
 {
     auto db = drogon::app().getDbClient();
 
@@ -84,8 +108,19 @@ void SetVM::operator()( const NewVirtualMachine& vm ) const
         passwordStr
     );
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::SetVM" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
+catch( ... )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::SetVM" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::SetVM" ) );
+}
 
-bool DeleteVM::operator()( const std::int32_t& id ) const
+
+bool DeleteVM::operator()( const std::int32_t& id ) const try
 {
     auto db = drogon::app().getDbClient();
 
@@ -95,5 +130,16 @@ bool DeleteVM::operator()( const std::int32_t& id ) const
     );
     return sqlQuery.affectedRows() > 0;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::DeleteVM" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
+catch( ... )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::DeleteVM" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::DeleteVM" ) );
+}
+
 
 } //namespace service_logic::logic

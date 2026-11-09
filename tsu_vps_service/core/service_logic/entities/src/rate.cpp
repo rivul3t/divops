@@ -2,8 +2,8 @@
 ///
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/entities/src
 
-#include <iostream>
 #include <tsu_vps_service/core/service_logic/entities/rate.h>
+#include <tsu_vps_service/core/helpers/exception.h>
 
 namespace service_logic
 {
@@ -27,7 +27,7 @@ void ReadJson( const Json::Value& jsonValue, NewRate& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception (NewRate)\n";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(NewRate)" ) );
     }
 }
 
@@ -47,7 +47,7 @@ void ReadJson( const Json::Value& jsonValue, Rate& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception (Rate)\n";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(Rate)" ) );
     }
 }
 

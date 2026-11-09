@@ -11,8 +11,7 @@ add_subdirectory(entities)
 add_subdirectory(logic)
 add_subdirectory(http)
 
-add_library(${PROJECT_NAME} INTERFACE
-        entities/src/rate.cpp)
+add_library(${PROJECT_NAME} INTERFACE )
 
 target_link_libraries(${PROJECT_NAME} INTERFACE
         service_logic_entities

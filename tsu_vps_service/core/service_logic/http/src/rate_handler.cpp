@@ -4,6 +4,7 @@
 
 #include <tsu_vps_service/core/service_logic/http/rate_handler.h>
 #include <tsu_vps_service/core/service_logic/logic/rate_handler.h>
+#include <tsu_vps_service/core/helpers/exception.h>
 
 namespace service_logic::http
 {
@@ -29,9 +30,13 @@ void RateHandler::GetRate( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( const std::exception& e )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void RateHandler::GetRateList( const drogon::HttpRequestPtr& request,
@@ -52,25 +57,26 @@ void RateHandler::GetRateList( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void RateHandler::SetRate( const drogon::HttpRequestPtr& request,
     std::function<void(const drogon::HttpResponsePtr &)> &&callback ) const try
 {
-    auto jsonPtr = request->getJsonObject();
-    if( !jsonPtr )
+    auto json = request->getJsonObject();
+    if( !json or json->empty() )
     {
-        auto response = drogon::HttpResponse::newHttpResponse();
-        response->setStatusCode( drogon::k400BadRequest );
-        callback( response );
-        return;
+        throw utils::Exception( utils::ExceptionType::WrongArgument, "Invalid JSON body" );
     }
 
     NewRate newRate;
-    ReadJson( *jsonPtr, newRate );
+    ReadJson( *json, newRate );
 
     logic::SetRate handler;
     handler( newRate );
@@ -79,8 +85,13 @@ void RateHandler::SetRate( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k201Created );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void RateHandler::UpdateRate( const drogon::HttpRequestPtr& request,
@@ -106,9 +117,13 @@ void RateHandler::UpdateRate( const drogon::HttpRequestPtr& request,
     response->setStatusCode( isUpdated ? drogon::k200OK : drogon::k404NotFound );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void RateHandler::DeleteRate( const drogon::HttpRequestPtr& request,
@@ -121,9 +136,13 @@ void RateHandler::DeleteRate( const drogon::HttpRequestPtr& request,
     response->setStatusCode( isDeleted ? drogon::k200OK : drogon::k404NotFound );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 } //namespace service_logic::http

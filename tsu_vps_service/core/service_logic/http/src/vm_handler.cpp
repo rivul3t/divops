@@ -5,6 +5,7 @@
 #include <tsu_vps_service/core/service_logic/http/vm_handler.h>
 #include <tsu_vps_service/core/service_logic/logic/vm_handler.h>
 #include <tsu_vps_service/core/service_logic/entities/virtual_machine.h>
+#include <tsu_vps_service/core/helpers/exception.h>
 
 namespace service_logic::http
 {
@@ -30,9 +31,13 @@ void VMHandler::GetVM( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void VMHandler::GetVMList( const drogon::HttpRequestPtr& request,
@@ -53,9 +58,13 @@ void VMHandler::GetVMList( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void VMHandler::SetVM( const drogon::HttpRequestPtr& request,
@@ -64,10 +73,7 @@ void VMHandler::SetVM( const drogon::HttpRequestPtr& request,
     auto jsonPtr = request->getJsonObject();
     if( !jsonPtr )
     {
-        auto response = drogon::HttpResponse::newHttpResponse();
-        response->setStatusCode( drogon::k400BadRequest );
-        callback( response );
-        return;
+        throw utils::Exception( utils::ExceptionType::WrongArgument, "Invalid JSON body" );
     }
 
     NewVirtualMachine newVm;
@@ -80,9 +86,13 @@ void VMHandler::SetVM( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k201Created );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void VMHandler::DeleteVM( const drogon::HttpRequestPtr& request,
@@ -95,9 +105,13 @@ void VMHandler::DeleteVM( const drogon::HttpRequestPtr& request,
     response->setStatusCode( isDeleted ? drogon::k200OK : drogon::k404NotFound );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 } // namespace service_logic::http

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.6)
 
-project(core)
+project( core )
 
 list(APPEND CMAKE_PREFIX_PATH "/home/nobahu/libs/drogon")
 find_package( Drogon REQUIRED )

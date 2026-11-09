@@ -4,8 +4,7 @@
 
 #include <tsu_vps_service/core/service_logic/entities/virtual_machine.h>
 #include <tsu_vps_service/core/helpers/utils.h>
-
-#include <iostream>
+#include <tsu_vps_service/core/helpers/exception.h>
 
 namespace service_logic
 {
@@ -29,7 +28,7 @@ void ReadJson( const Json::Value& jsonValue, NewVirtualMachine& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(NewVirtualMachine)" ) );
     }
 }
 
@@ -48,7 +47,7 @@ void ReadJson( const Json::Value& jsonValue, VirtualMachine& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(VirtualMachine)" ) );
     }
 }
 

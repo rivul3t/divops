@@ -4,6 +4,8 @@
 
 #include <tsu_vps_service/core/service_logic/logic/user_handler.h>
 #include <tsu_vps_service/core/helpers/utils.h>
+#include <tsu_vps_service/core/helpers/exception.h>
+#include <tsu_vps_service/core/helpers/logger.h>
 #include <drogon/drogon.h>
 
 namespace service_logic::logic
@@ -42,9 +44,15 @@ std::optional< User > GetUser::operator()( const std::int32_t& id ) const try
 
     return user;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::GetUser" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetUser" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::GetUser" ) );
 }
 
 std::vector< User > GetUserList::operator()() const try
@@ -80,9 +88,15 @@ std::vector< User > GetUserList::operator()() const try
 
     return userList;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::GetUserList" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetUserList" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::GetUserList" ) );
 }
 
 void SetUser::operator()( NewUser& userData ) const try
@@ -98,9 +112,15 @@ void SetUser::operator()( NewUser& userData ) const try
         utils::ToEpochMs( userData.creationDate_ ), utils::ToEpochMs( userData.updatedDate_ )
     );
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::SetUser" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::SetUser" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::SetUser" ) );
 }
 
 } //namespace service_logic::logic

@@ -4,7 +4,8 @@
 
 #include <tsu_vps_service/core/service_logic/http/user_handler.h>
 #include <tsu_vps_service/core/service_logic/logic/user_handler.h>
-#include <tsu_vps_service/core/service_logic/entities/user.h>
+#include <tsu_vps_service/core/helpers/exception.h>
+#include <tsu_vps_service/core/helpers/logger.h>
 
 namespace service_logic::http
 {
@@ -30,9 +31,13 @@ void GetUser::operator()( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void GetUserList::operator()( const drogon::HttpRequestPtr& request,
@@ -53,9 +58,13 @@ void GetUserList::operator()( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k200OK );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 void SetUser::operator()( const drogon::HttpRequestPtr& request,
@@ -64,11 +73,7 @@ void SetUser::operator()( const drogon::HttpRequestPtr& request,
     auto json = request->getJsonObject();
     if( !json or json->empty() )
     {
-        auto resp = drogon::HttpResponse::newHttpResponse();
-        resp->setStatusCode( drogon::k400BadRequest );
-        resp->setBody( "Invalid JSON body" );
-        callback( resp );
-        return;
+        throw utils::Exception( utils::ExceptionType::WrongArgument, "Invalid JSON body" );
     }
 
     NewUser userInfo;
@@ -80,9 +85,13 @@ void SetUser::operator()( const drogon::HttpRequestPtr& request,
     response->setStatusCode( drogon::k201Created );
     callback( response );
 }
-catch( ... )
+catch( utils::Exception& e )
 {
-
+    auto resp = drogon::HttpResponse::newHttpResponse();
+    resp->setStatusCode( utils::ExceptionToStatusCode( e.GetType() ) );
+    resp->setContentTypeCode(drogon::CT_APPLICATION_JSON);
+    resp->setBody(std::string("{\"error\": \"") + e.what() + "\"}");
+    callback(resp);
 }
 
 } //namespace service_logic::http

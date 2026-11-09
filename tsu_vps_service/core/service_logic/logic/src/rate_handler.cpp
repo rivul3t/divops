@@ -3,6 +3,9 @@
 /// @file tsu_vps_service — tsu_vps_service/core/service_logic/logic/src
 
 #include <tsu_vps_service/core/service_logic/logic/rate_handler.h>
+#include <tsu_vps_service/core/helpers/logger.h>
+#include <tsu_vps_service/core/helpers/exception.h>
+
 #include <drogon/drogon.h>
 
 namespace service_logic::logic
@@ -35,9 +38,19 @@ std::optional< Rate > GetRate::operator()( const std::uint32_t& id ) const try
 
     return rate;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    throw utils::Exception( utils::ExceptionType::DatabaseError );
+}
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::GetRate" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetRate" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::GetRate" ) );
 }
 
 std::vector< Rate > GetRateList::operator()() const try
@@ -68,9 +81,15 @@ std::vector< Rate > GetRateList::operator()() const try
 
     return rates;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetRateList" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::GetRateList" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::SetRate" ) );
 }
 
 void SetRate::operator()( const NewRate& rate ) const try
@@ -86,9 +105,15 @@ void SetRate::operator()( const NewRate& rate ) const try
         static_cast< int >( rate.price_ )
     );
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::SetRate" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::SetRate" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::SetRate" ) );
 }
 
 bool UpdateRate::operator()( const Rate& rate ) const try
@@ -108,9 +133,15 @@ bool UpdateRate::operator()( const Rate& rate ) const try
 
     return sqlQuery.affectedRows() > 0;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::UpdateRate" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::UpdateRate" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::UpdateRate" ) );
 }
 
 bool DeleteRate::operator()( const std::uint32_t& id ) const try
@@ -124,9 +155,15 @@ bool DeleteRate::operator()( const std::uint32_t& id ) const try
 
     return sqlQuery.affectedRows() > 0;
 }
+catch ( const drogon::orm::DrogonDbException& e )
+{
+    APP_LOG_ERROR( fmt::format("Get db exception in method: {}", "service_logic::logic::DeleteRate" ) );
+    throw utils::Exception( utils::ExceptionType::DatabaseError, e.base().what() );
+}
 catch( ... )
 {
-
+    APP_LOG_ERROR( fmt::format("Get exception in method: {}", "service_logic::logic::DeleteRate" ) );
+    utils::RethrowException( utils::Exception( utils::ExceptionType::InternalError, "service_logic::logic::DeleteRate" ) );
 }
 
 } //namespace service_logic::logic

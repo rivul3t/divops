@@ -2,9 +2,9 @@
 ///
 /// @file divops — tsu_vps_service/core/service_logic/entities/src
 
-#include <iostream>
 #include <tsu_vps_service/core/service_logic/entities/user.h>
 #include <tsu_vps_service/core/helpers/utils.h>
+#include <tsu_vps_service/core/helpers/exception.h>
 
 namespace service_logic
 {
@@ -55,7 +55,7 @@ void ReadJson( const Json::Value& jsonValue, NewUser& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(NewUser)" ) );
     }
 }
 
@@ -74,7 +74,7 @@ void ReadJson( const Json::Value& jsonValue, User& value )
     }
     catch( ... )
     {
-        std::cerr << "ReadJson exception";
+        utils::RethrowException( utils::Exception( utils::ExceptionType::WrongArgument, "ReadJson(User)" ) );
     }
 }
 
