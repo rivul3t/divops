@@ -1,0 +1,20 @@
+controller_url = "https://<адрес API облака>"
+bvs_url        = "https://<адрес BVS>"
+bvs_domain     = "<домен>"
+
+rg_id           = 0
+ubuntu_image_id = 0
+net_type        = "EXTNET"
+net_id          = 0
+
+students = [
+  "ivan.petrov",
+  "anna.smirnova",
+  "petr.ivanov",
+]
+
+ssh_public_keys = [
+  "ssh-ed25519 AAAA... ivan",
+  "ssh-ed25519 AAAA... anna",
+  "ssh-ed25519 AAAA... petr",
+]

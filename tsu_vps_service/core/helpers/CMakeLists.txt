@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 file(GLOB_RECURSE SRC src/*.cpp)
 
-list(APPEND CMAKE_PREFIX_PATH "/home/nobahu/libs/drogon")
 find_package( spdlog REQUIRED )
 
 add_library( ${PROJECT_NAME}

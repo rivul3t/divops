@@ -1,0 +1,35 @@
+# Шаблон конфига nginx. Официальный образ nginx прогоняет его через envsubst
+# при старте (/etc/nginx/templates/*.template -> /etc/nginx/conf.d/), подставляя
+# ТОЛЬКО объявленные переменные окружения — ${BACKEND_HOST} и ${DNS_RESOLVER}.
+# Переменные nginx ($host, $uri, ...) не трогаются.
+#
+#   BACKEND_HOST  — адрес бэкенда, напр. tsu-vps-service:8080
+#   DNS_RESOLVER  — DNS кластера (в k3s CoreDNS это обычно 10.43.0.10),
+#                   для docker-compose — 127.0.0.11
+
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Статика фронта (SPA: неизвестные пути отдаём на index.html).
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Прокси на бэкенд — тот же origin, поэтому CORS не нужен.
+    # resolver + переменная => имя бэкенда резолвится в рантайме, и nginx
+    # поднимается, даже если бэкенд ещё не задеплоен.
+    location /logic/ {
+        resolver ${DNS_RESOLVER} valid=10s;
+        set $upstream http://${BACKEND_HOST};
+        proxy_pass $upstream$request_uri;
+
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

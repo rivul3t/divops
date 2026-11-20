@@ -16,10 +16,10 @@ CREATE TABLE IF NOT EXISTS service_rates (
 );
 
 
-CREATE TABLE IF NOT EXISTS vm_data (
+CREATE TABLE IF NOT EXISTS virtual_machines (
     id              SERIAL PRIMARY KEY,
     user_id         INTEGER NOT NULL REFERENCES user_data(id) ON DELETE CASCADE,
+    rate_id         INTEGER NOT NULL REFERENCES service_rates(id) ON DELETE CASCADE,
     address         VARCHAR NOT NULL UNIQUE,
-    password        VARCHAR NOT NULL,
-    service_rate    INTEGER NOT NULL REFERENCES service_rates(id) ON DELETE CASCADE
+    password        VARCHAR NOT NULL
 );

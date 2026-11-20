@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VPS сервис — панель</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">VPS<span>сервис</span></div>
+    <div class="api-config">
+      <label for="api-base">API:</label>
+      <input id="api-base" type="text" spellcheck="false" placeholder="(тот же origin)">
+      <button id="api-save" class="btn btn-ghost">Сохранить</button>
+      <span id="api-status" class="api-status"></span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab is-active" data-tab="users">Пользователи</button>
+    <button class="tab" data-tab="rates">Тарифы</button>
+    <button class="tab" data-tab="vms">Виртуалки</button>
+  </nav>
+
+  <main>
+    <!-- ======================= Пользователи ======================= -->
+    <section id="tab-users" class="tab-panel is-active">
+      <div class="card">
+        <h2>Новый пользователь</h2>
+        <form id="user-form" class="form-grid">
+          <label>Email<input name="email" type="email" required></label>
+          <label>Пароль<input name="password" type="text" required></label>
+          <label>Роль
+            <select name="role">
+              <option value="user">user</option>
+              <option value="auth_user">auth_user</option>
+              <option value="administrator">administrator</option>
+            </select>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Создать</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Пользователи</h2>
+          <button class="btn btn-ghost" data-refresh="users">Обновить</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Email</th><th>Роль</th><th>Создан</th></tr>
+          </thead>
+          <tbody id="users-rows"><tr><td colspan="4" class="muted">—</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================= Тарифы ======================= -->
+    <section id="tab-rates" class="tab-panel">
+      <div class="card">
+        <h2 id="rate-form-title">Новый тариф</h2>
+        <form id="rate-form" class="form-grid">
+          <input name="id" type="hidden">
+          <label>Название<input name="name" type="text" required></label>
+          <label>RAM, МБ<input name="ram_amount" type="number" min="0" required></label>
+          <label>Диск, ГБ<input name="hd_amount" type="number" min="0" required></label>
+          <label>Цена<input name="price" type="number" min="0" step="1" required></label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="rate-submit">Создать</button>
+            <button type="button" class="btn btn-ghost hidden" id="rate-cancel">Отмена</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Тарифы</h2>
+          <button class="btn btn-ghost" data-refresh="rates">Обновить</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Название</th><th>RAM</th><th>Диск</th><th>Цена</th><th></th></tr>
+          </thead>
+          <tbody id="rates-rows"><tr><td colspan="6" class="muted">—</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ======================= Виртуалки ======================= -->
+    <section id="tab-vms" class="tab-panel">
+      <div class="card">
+        <h2>Новая виртуальная машина</h2>
+        <form id="vm-form" class="form-grid">
+          <label>Пользователь
+            <select name="user_id" id="vm-user" required></select>
+          </label>
+          <label>Тариф
+            <select name="rate_type" id="vm-rate" required></select>
+          </label>
+          <label>Адрес<input name="address" type="text" placeholder="10.0.0.5" required></label>
+          <label>Пароль<input name="password" type="text" required></label>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Создать</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h2>Виртуальные машины</h2>
+          <button class="btn btn-ghost" data-refresh="vms">Обновить</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr><th>ID</th><th>Пользователь</th><th>Тариф</th><th>Адрес</th><th></th></tr>
+          </thead>
+          <tbody id="vms-rows"><tr><td colspan="5" class="muted">—</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

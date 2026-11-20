@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <optional>
+
 #include <tsu_vps_service/core/service_logic/entities/user.h>
 
 namespace service_logic::logic

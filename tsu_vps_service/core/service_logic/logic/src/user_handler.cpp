@@ -107,7 +107,7 @@ void SetUser::operator()( NewUser& userData ) const try
 
     auto sqlQuery = db->execSqlSync(
      "INSERT INTO user_data (email, password, role, created_at, updated_at) "
-        "VALUES ($1, $2, $3, $4, $5)",
+        "VALUES ($1, $2, $3, to_timestamp($4::bigint / 1000.0), to_timestamp($5::bigint / 1000.0))",
         userData.email_, utils::Base64Decode( userData.password_ ), RoleToString( userData.role_ ),
         utils::ToEpochMs( userData.creationDate_ ), utils::ToEpochMs( userData.updatedDate_ )
     );

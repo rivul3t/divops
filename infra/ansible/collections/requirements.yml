@@ -1,0 +1,11 @@
+---
+# Official k3s playbook, packaged as the k3s.orchestration collection.
+# https://github.com/k3s-io/k3s-ansible
+collections:
+  - name: https://github.com/k3s-io/k3s-ansible.git
+    type: git
+    version: "1.2.2"
+
+  - name: community.general
+  - name: ansible.posix
+  - name: ansible.utils
